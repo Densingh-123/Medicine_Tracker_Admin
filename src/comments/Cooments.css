@@ -1,0 +1,42 @@
+.user-data-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: #f9f9f9;
+    padding: 20px;
+    margin-top: 50px; /* Adjusted to prevent excessive margin */
+    margin-left: 200px;
+    height: 100vh; /* Set a height to fit the screen */
+    overflow: hidden; /* Prevents entire page scrolling */
+  }
+  
+  .medication-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    width: 100%;
+    max-height: 500px; /* Adjust height as needed */
+    overflow-y: auto; /* Enables scrolling */
+    padding: 10px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .medication-card {
+    background: #fff;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 700px;
+    min-height: 200px;
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+    transition: transform 0.3s ease;
+  }
+  
+  .medication-card:hover {
+    transform: translateY(-5px);
+  }
+  

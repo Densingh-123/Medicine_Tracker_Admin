@@ -29,7 +29,7 @@ const Users = () => {
           mergedUsers.push({
             id: med.id,
             userEmail: med.userEmail,
-            userName: user ? user.name : med.userEmail.split('@')[0],
+            userName: user && user.name ? user.name : med.userEmail.split('@')[0],
           });
         });
 
@@ -39,7 +39,7 @@ const Users = () => {
             mergedUsers.push({
               id: user.id,
               userEmail: user.email,
-              userName: user.name || user.email.split('@')[0],
+              userName: user.name ? user.name : user.email.split('@')[0],
             });
           }
         });

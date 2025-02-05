@@ -12,12 +12,39 @@ const Users = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const querySnapshot = await getDocs(collection(db, 'medications'));
-        const usersList = [];
-        querySnapshot.forEach(doc => {
-          usersList.push({ id: doc.id, ...doc.data() });
+        // Fetch data from 'medications' collection
+        const medicationSnapshot = await getDocs(collection(db, 'medications'));
+        const medicationsData = medicationSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+        // Fetch data from 'users' collection
+        const usersSnapshot = await getDocs(collection(db, 'users'));
+        const usersData = usersSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+        // Merge data based on userEmail
+        const mergedUsers = [];
+
+        // Add users from medications with corresponding user info
+        medicationsData.forEach(med => {
+          const user = usersData.find(u => u.email === med.userEmail);
+          mergedUsers.push({
+            id: med.id,
+            userEmail: med.userEmail,
+            userName: user ? user.name : med.userEmail.split('@')[0],
+          });
         });
-        setUsers(usersList);
+
+        // Add users from 'users' collection if not already in mergedUsers
+        usersData.forEach(user => {
+          if (!mergedUsers.some(m => m.userEmail === user.email)) {
+            mergedUsers.push({
+              id: user.id,
+              userEmail: user.email,
+              userName: user.name || user.email.split('@')[0],
+            });
+          }
+        });
+
+        setUsers(mergedUsers);
       } catch (error) {
         console.error('Error fetching users:', error);
       }
@@ -34,20 +61,6 @@ const Users = () => {
     if (sidebarOpen) {
       setSidebarOpen(false);
     }
-  };
-
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    return date.toLocaleString('en-US', { 
-      weekday: 'long', 
-      year: 'numeric', 
-      month: 'long', 
-      day: 'numeric', 
-      hour: 'numeric', 
-      minute: 'numeric', 
-      second: 'numeric', 
-      timeZoneName: 'short' 
-    });
   };
 
   return (
@@ -68,13 +81,12 @@ const Users = () => {
               <div key={user.id} className="user-row">
                 <div className="user-info">
                   <FaUser className="user-icon" />
-                  <div className="user-name">{user.userEmail.split('@')[0]}</div>
+                  <div className="user-name">{user.userName}</div>
                 </div>
                 <div className="user-info">
                   <FaEnvelope className="user-icon" />
                   <div className="user-email">{user.userEmail}</div>
                 </div>
-              
               </div>
             ))
           )}

@@ -1,5 +1,5 @@
 import React from 'react';
-import Sidebar from '../sidebar/SIdeBar';
+import Sidebar from '../sidebar/SideBar';
 
 const Service = () => {
   return (
